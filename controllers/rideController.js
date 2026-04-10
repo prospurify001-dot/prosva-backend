@@ -30,6 +30,53 @@ const acceptRide = async (req, res) => {
       return res.status(404).json({ message: "Ride not found" });
     }
 
+    const Ride = require("../models/Ride");
+
+const acceptRide = async (req, res) => {
+  const { rideId, driverId } = req.body;
+
+  const ride = await Ride.findById(rideId);
+
+  if (!ride) {
+    return res.status(404).json({ message: "Ride not found" });
+  }
+
+  if (ride.status !== "pending") {
+    return res.status(400).json({ message: "Ride already accepted" });
+  }
+
+  ride.driverId = driverId;
+  ride.status = "accepted";
+
+  await ride.save();
+
+  const io = req.app.get("io");
+
+  // notify rider
+  io.to(ride.riderId.toString()).emit("rideAccepted", ride);
+
+  res.json(ride);
+};
+
+const updateRideStatus = async (req, res) => {
+  const { rideId, status } = req.body;
+
+  const ride = await Ride.findById(rideId);
+
+  if (!ride) {
+    return res.status(404).json({ message: "Ride not found" });
+  }
+
+  ride.status = status;
+  await ride.save();
+
+  const io = req.app.get("io");
+
+  // notify rider
+  io.to(ride.riderId.toString()).emit("rideStatusUpdated", ride);
+
+  res.json(ride);
+};
     // Prevent double acceptance
     if (ride.status !== "requested") {
       return res.status(400).json({ message: "Ride already taken" });

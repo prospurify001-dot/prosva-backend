@@ -4,26 +4,50 @@ const rideSchema = new mongoose.Schema(
   {
     rider: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
+      ref: "User",
+      required: true
     },
+
     driver: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Driver",
+      ref: "User", // keep consistent unless you truly have a Driver model
       default: null
     },
+
+    // 📍 Pickup location (structured for geo usage)
     pickupLocation: {
-      lat: Number,
-      lng: Number
+      lat: { type: Number, required: true },
+      lng: { type: Number, required: true },
+      address: { type: String } // optional human-readable
     },
+
+    // 📍 Dropoff location
     dropoffLocation: {
+      lat: { type: Number, required: true },
+      lng: { type: Number, required: true },
+      address: { type: String }
+    },
+
+    // 🧭 Ride status lifecycle
+    status: {
+      type: String,
+      enum: [
+        "pending",      // created but not accepted
+        "accepted",     // driver accepted
+        "in_progress",  // picked up
+        "completed",
+        "cancelled"
+      ],
+      enum: ["requested", "accepted", "picked_up", "completed"],
+default: "requested"
+    },
+
+    // 🧠 Optional: assigned driver location snapshot at acceptance
+    driverLocationAtAccept: {
       lat: Number,
       lng: Number
-    },
-    status: {
-  type: String,
-  enum: ["pending", "accepted", "picked_up", "completed"],
-  default: "pending"
-}
+    }
+
   },
   { timestamps: true }
 );

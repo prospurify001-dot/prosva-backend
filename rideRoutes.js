@@ -1,22 +1,29 @@
-const mongoose = require("mongoose");
+const express = require("express");
+const router = express.Router();
 
-const rideSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true
-  },
-  driver: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
-  },
-  pickup: String,
-  destination: String,
-  status: {
-    type: String,
-    enum: ["requested", "accepted", "picked_up", "completed"],
-    default: "requested"
-  }
-}, { timestamps: true });
+const authMiddleware = require("../middleware/authMiddleware");
 
-module.exports = mongoose.model("Ride", rideSchema);
+const {
+  requestRide,
+  getAvailableRides,
+  acceptRide,
+  pickUpRide,
+  completeRide
+} = require("../controllers/rideController");
+
+// Rider requests ride
+router.post("/request", requestRide);
+
+// Driver gets available rides
+router.get("/", authMiddleware, getAvailableRides);
+
+// Driver accepts ride
+router.put("/:id/accept", authMiddleware, acceptRide);
+
+// Driver picks up rider
+router.put("/:id/pickup", authMiddleware, pickUpRide);
+
+// Driver completes ride
+router.put("/:id/complete", authMiddleware, completeRide);
+
+module.exports = router;

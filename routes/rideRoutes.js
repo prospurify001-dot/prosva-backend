@@ -1,8 +1,8 @@
-const mongoose = require("mongoose"); // ✅ must be first
 const express = require("express");
 const router = express.Router();
 
 const authMiddleware = require("../middleware/authMiddleware");
+
 const {
   requestRide,
   acceptRide,
