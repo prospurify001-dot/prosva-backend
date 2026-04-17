@@ -1,13 +1,22 @@
-const mongoose = require("mongoose");
 const Ride = require("../models/Ride");
 
 // 🚗 Request Ride
 const requestRide = async (req, res) => {
   try {
+    const {
+      pickupLat,
+      pickupLng,
+      dropoffLat,
+      dropoffLng
+    } = req.body;
+
     const ride = new Ride({
-      pickup: "Sample Pickup",
-      destination: "Sample Destination",
-      status: "requested"
+      riderId: req.user?.id, // requires auth middleware
+      pickupLat,
+      pickupLng,
+      dropoffLat,
+      dropoffLng,
+      status: "pending"
     });
 
     await ride.save();
@@ -29,11 +38,12 @@ const acceptRide = async (req, res) => {
       return res.status(404).json({ message: "Ride not found" });
     }
 
-    if (ride.status !== "requested") {
+    if (ride.status !== "pending") {
       return res.status(400).json({ message: "Ride already taken" });
     }
 
     ride.status = "accepted";
+    ride.driverId = req.user?.id;
 
     await ride.save();
 
