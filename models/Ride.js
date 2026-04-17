@@ -95,3 +95,5 @@ module.exports = {
   pickUpRide,
   completeRide
 };
+
+module.exports = mongoose.model("Ride", rideSchema);
