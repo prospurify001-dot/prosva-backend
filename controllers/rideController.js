@@ -3,15 +3,10 @@ const Ride = require("../models/Ride");
 // 🚗 Request Ride
 const requestRide = async (req, res) => {
   try {
-    const {
-      pickupLat,
-      pickupLng,
-      dropoffLat,
-      dropoffLng
-    } = req.body;
+    const { pickupLat, pickupLng, dropoffLat, dropoffLng } = req.body;
 
     const ride = new Ride({
-      riderId: req.user?.id, // requires auth middleware
+      riderId: req.user.id,
       pickupLat,
       pickupLng,
       dropoffLat,
@@ -43,7 +38,7 @@ const acceptRide = async (req, res) => {
     }
 
     ride.status = "accepted";
-    ride.driverId = req.user?.id;
+    ride.driverId = req.user.id;
 
     await ride.save();
 
@@ -100,18 +95,4 @@ module.exports = {
   acceptRide,
   pickUpRide,
   completeRide
-};
-
-const Ride = require("../models/Ride");
-
-// 🚕 Get all pending rides (drivers use this)
-const getAvailableRides = async (req, res) => {
-  try {
-    const rides = await Ride.find({ status: "pending" })
-      .sort({ createdAt: -1 });
-
-    res.json(rides);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
 };
