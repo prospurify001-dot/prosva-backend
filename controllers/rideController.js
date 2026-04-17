@@ -1,5 +1,5 @@
-const Ride = require("../models/Ride");
 const mongoose = require("mongoose");
+const Ride = require("../models/Ride");
 
 // 🚗 Request Ride
 const requestRide = async (req, res) => {
