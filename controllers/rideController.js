@@ -101,3 +101,17 @@ module.exports = {
   pickUpRide,
   completeRide
 };
+
+const Ride = require("../models/Ride");
+
+// 🚕 Get all pending rides (drivers use this)
+const getAvailableRides = async (req, res) => {
+  try {
+    const rides = await Ride.find({ status: "pending" })
+      .sort({ createdAt: -1 });
+
+    res.json(rides);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
