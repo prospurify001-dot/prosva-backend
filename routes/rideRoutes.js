@@ -10,7 +10,7 @@ const {
   completeRide
 } = require("../controllers/rideController");
 
-router.post("/request", authMiddleware, requestRide);
+router.post("/request", requestRide);
 router.put("/accept/:rideId", authMiddleware, acceptRide);
 router.put("/pickup/:rideId", authMiddleware, pickUpRide);
 router.put("/complete/:rideId", authMiddleware, completeRide);

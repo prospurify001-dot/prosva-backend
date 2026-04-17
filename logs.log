@@ -497,3 +497,9 @@
 {"level":"info","message":"Driver routes loaded"}
 {"level":"info","message":"Server running on port 5000"}
 {"level":"info","message":"MongoDB connected successfully"}
+{"level":"info","message":"Server initializing..."}
+{"level":"info","message":"Auth routes loaded"}
+{"level":"info","message":"Ride routes loaded"}
+{"level":"info","message":"Driver routes loaded"}
+{"level":"info","message":"Server running on port 5000"}
+{"level":"info","message":"MongoDB connected successfully"}
