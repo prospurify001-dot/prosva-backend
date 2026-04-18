@@ -27,4 +27,3 @@ const rideSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("Ride", rideSchema);
-router.get("/available", getAvailableRides);
